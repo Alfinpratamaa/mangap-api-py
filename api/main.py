@@ -341,10 +341,10 @@ async def popular():
 
             return jsonify({"status": "success", "data": komik_list}), 200
     except Exception as e:
-        print(e)
+        print(str(e))
         return jsonify({"status": "failed", "message": str(e)}), status_code
     
-    return jsonify({"status": "failed", "message": "failed"}), status_code
+    return jsonify({"status": "failed", "message": str(Exception)}), status_code
 
 @app.route("/recommended", methods=["GET"])
 async def recommended():
@@ -379,6 +379,10 @@ async def recommended():
 @app.errorhandler(Exception)
 async def handle_error(e):
     return jsonify({"status": "failed", "message": str(e)}), 500
+
+@app.errorhandler(403)
+async def handle_403(e):
+    return jsonify({"status": "failed", "message": str(e)}), 403
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=port,debug=True)

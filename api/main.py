@@ -342,7 +342,7 @@ async def popular():
             return jsonify({"status": "success", "data": komik_list}), 200
     except Exception as e:
         print(e)
-        return jsonify({"status": "failed", "message": e}), status_code
+        return jsonify({"status": "failed", "message": str(e)}), status_code
     
     return jsonify({"status": "failed", "message": "failed"}), status_code
 
@@ -375,6 +375,10 @@ async def recommended():
         return jsonify({"status": "success", "data": komik_list}), 200
     
     return jsonify({"status": "failed", "message": "failed"}), status_code
+
+@app.errorhandler(Exception)
+async def handle_error(e):
+    return jsonify({"status": "failed", "message": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=port,debug=True)

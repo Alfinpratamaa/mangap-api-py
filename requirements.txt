@@ -1,4 +1,5 @@
-quart==0.18.3
-beautifulsoup4==4.12.2
+quart==0.15.1
+beautifulsoup4==4.10.0
 cfscrape==2.1.1
-asyncio==3.4.3
+requests==2.27.1
+urllib3==1.26.7

@@ -364,6 +364,5 @@ async def recommended():
 if __name__ == "__main__":
     app.run(port=8000,debug=True)
 
-async def main(request):
-    return await app.handle_request(request)
+
 

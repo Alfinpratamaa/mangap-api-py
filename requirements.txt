@@ -1,4 +1,4 @@
-Quart==0.16.2
-beautifulsoup4==4.10.0
+quart==0.18.3
+beautifulsoup4==4.12.2
 cfscrape==2.1.1
-aiohttp==3.8.5
+asyncio==3.4.3

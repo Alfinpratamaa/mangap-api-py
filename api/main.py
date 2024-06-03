@@ -19,7 +19,7 @@ async def fetch(url):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
-    response = await loop.run_in_executor(executor, scraper.get, url, headers=headers)
+    response = await loop.run_in_executor(executor, lambda: scraper.get(url, headers=headers))
     return response.text, response.status_code
 
 @app.route("/terbaru", methods=["GET"])

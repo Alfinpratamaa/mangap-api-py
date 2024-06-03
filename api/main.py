@@ -3,9 +3,13 @@ from bs4 import BeautifulSoup
 import cfscrape
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+import os
+
 
 app = Quart(__name__)
 base_url = "https://komikcast.lol"
+
+port = int(os.environ.get("PORT", 5000))
 
 scraper = cfscrape.create_scraper()
 executor = ThreadPoolExecutor(max_workers=10)
@@ -369,7 +373,7 @@ async def recommended():
     return jsonify({"status": "failed", "message": "failed"}), status_code
 
 if __name__ == "__main__":
-    app.run(port=8000,debug=True)
+    app.run(host="0.0.0.0",port=port,debug=True)
 
 
 

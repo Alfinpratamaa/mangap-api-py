@@ -307,27 +307,31 @@ async def detail(url):
 
 @app.route("/popular", methods=["GET"])
 async def popular():
-    html, status_code = await fetch(base_url)
-    if status_code == 200:
-        soup = BeautifulSoup(html, 'html.parser')
-        element = soup.select_one("#content > .wrapper > #sidebar")
-        komik_list = []
+    try:
+        html, status_code = await fetch(base_url)
+        if status_code == 200:
+            soup = BeautifulSoup(html, 'html.parser')
+            element = soup.select_one("#content > .wrapper > #sidebar")
+            komik_list = []
 
-        for data in element.select(".section > .widget-post > .serieslist.pop > ul > li"):
-            title = data.select_one(".leftseries > h2 > a").text.strip()
-            year = data.select_one(".leftseries > span:nth-child(3)").text.strip()
-            genre = data.select_one(".leftseries > span:nth-child(2)").text.strip().replace("Genres:", "").strip()
-            thumbnail = data.select_one(".imgseries > a > img").get("src")
-            href = data.select_one(".imgseries > a").get("href")
-            komik_list.append({
-                "title": title,
-                "href": href.replace(f"{base_url}/komik", "").strip(),
-                "genre": genre,
-                "year": year,
-                "thumbnail": thumbnail
-            })
+            for data in element.select(".section > .widget-post > .serieslist.pop > ul > li"):
+                title = data.select_one(".leftseries > h2 > a").text.strip()
+                year = data.select_one(".leftseries > span:nth-child(3)").text.strip()
+                genre = data.select_one(".leftseries > span:nth-child(2)").text.strip().replace("Genres:", "").strip()
+                thumbnail = data.select_one(".imgseries > a > img").get("src")
+                href = data.select_one(".imgseries > a").get("href")
+                komik_list.append({
+                    "title": title,
+                    "href": href.replace(f"{base_url}/komik", "").strip(),
+                    "genre": genre,
+                    "year": year,
+                    "thumbnail": thumbnail
+                })
 
-        return jsonify({"status": "success", "data": komik_list}), 200
+            return jsonify({"status": "success", "data": komik_list}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({"status": "failed", "message": e}), status_code
     
     return jsonify({"status": "failed", "message": "failed"}), status_code
 

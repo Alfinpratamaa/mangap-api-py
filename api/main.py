@@ -4,7 +4,7 @@ import cfscrape
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import os
-
+import random
 
 app = Quart(__name__)
 base_url = "https://komikcast.lol"
@@ -13,16 +13,16 @@ port = int(os.environ.get("PORT", 5000))
 
 scraper = cfscrape.create_scraper()
 executor = ThreadPoolExecutor(max_workers=10)
-api_key = os.environ.get('anjay') 
+
+user_agents_list = [
+    'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36'
+]
 
 async def fetch(url):
     loop = asyncio.get_event_loop()
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
-    # Jika kunci API diperlukan oleh layanan yang Anda akses, tambahkan ke header permintaan
-    if api_key:
-        headers['Authorization'] = f'Bearer {api_key}'
+    headers={'User-Agent': random.choice(user_agents_list)}
     response = await loop.run_in_executor(executor, lambda: scraper.get(url, headers=headers))
     return response.text, response.status_code
 
